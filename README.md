@@ -55,7 +55,7 @@ pip install streamlit youtube-transcript-api pandas openai wordcloud
 streamlit run storytelling.py
 ```
 
-3. Access the app in the url shared by StreamLit
+3. Access the app with the url shared by StreamLit console
 
 ---
 
