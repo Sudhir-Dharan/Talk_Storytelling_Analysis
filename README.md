@@ -1,4 +1,4 @@
-# 🗂 Code Inventory – Talk Storytelling Analyzer
+# 🗂 Talk Storytelling Analyzer
 
 This document outlines the structure, purpose, and technical components of the `storytelling_analysis.zip` project, which is a lightweight app designed to mine storytelling patterns from TED Talks using YouTube transcripts.
 
