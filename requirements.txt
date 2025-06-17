@@ -4,3 +4,4 @@ pandas
 openai
 matplotlib
 wordcloud
+load_dotenv

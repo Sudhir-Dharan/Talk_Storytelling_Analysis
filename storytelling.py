@@ -5,9 +5,21 @@ import openai
 import re
 import matplotlib.pyplot as plt
 from wordcloud import WordCloud
+from dotenv import load_dotenv  # Correct import for load_dotenv
+import os
+
+# Load environment variables from .env file
+dotenv_path = os.path.join(os.path.dirname(__file__), '.env')  # Explicitly specify the .env file path
+load_dotenv(dotenv_path)
+openai_api_key = os.getenv("STORY_OPENAI_API_KEY")
+
+if not openai_api_key:
+    print("Error: OpenAI API key not found. Ensure the .env file is correctly configured.")
+else:
+    print("OpenAI API Key loaded successfully.")  # Debugging line to confirm the key is loaded
 
 # GPT 4.0+ compatible client initialization
-client = openai.OpenAI(api_key="<OPENAI-KEY-HERE>")
+client = openai.OpenAI(api_key=openai_api_key)
 
 
 
@@ -61,7 +73,7 @@ def gpt_analysis(transcript):
         {transcript[:2000]}
         """
         response = client.chat.completions.create(
-            model="gpt-4",
+            model="gpt-4o",
             messages=[
                 {"role": "system", "content": "You are a  storytelling expert."},
                 {"role": "user", "content": prompt}
@@ -90,6 +102,79 @@ def render_wordcloud(df):
         ax.imshow(wordcloud, interpolation='bilinear')
         ax.axis("off")
         st.pyplot(fig)
+
+def generate_comprehensive_report(df):
+    try:
+        st.subheader("📋 Comprehensive Report")
+        good_points = []
+        improvement_areas = []
+        data_learnings = []
+
+        for _, row in df.iterrows():
+            if "humor" in row["Storytelling Tags"]:
+                good_points.append(f"{row['Title']}: Effective use of humor.")
+            if "data-driven" in row["Storytelling Tags"]:
+                good_points.append(f"{row['Title']}: Strong use of data to support storytelling.")
+            if not row["Emotion Keywords"]:
+                improvement_areas.append(f"{row['Title']}: Could include more emotional elements.")
+            if not row["Conflict Words"]:
+                improvement_areas.append(f"{row['Title']}: Could include more conflict or challenges to engage the audience.")
+
+            data_learnings.append(f"{row['Title']}: {row['Storytelling Tags']}")
+
+        st.markdown("### ✅ Good Points")
+        st.markdown("\n".join(f"- {point}" for point in good_points) or "No significant good points identified.")
+
+        st.markdown("### ⚠️ Improvement Areas")
+        st.markdown("\n".join(f"- {area}" for area in improvement_areas) or "No significant improvement areas identified.")
+
+        st.markdown("### 📊 Data-Driven Learnings")
+        st.markdown("\n".join(f"- {learning}" for learning in data_learnings) or "No significant data-driven learnings identified.")
+    except Exception as e:
+        st.error(f"Error generating comprehensive report: {e}")
+
+def generate_comprehensive_report_with_gpt(df):
+    try:
+        st.subheader("📋 Comprehensive Report (GPT-Generated)")
+        combined_transcripts = " ".join(df["Transcript"].dropna().values)
+        prompt = f"""
+        Based on the following combined transcripts of analyzed talks, provide a comprehensive report:
+        - Highlight the good storytelling practices observed.
+        - Suggest areas for improvement in storytelling.
+        - Derive generic data-driven learnings applicable across all talks.
+=
+        Combined Transcripts:
+        {combined_transcripts[:3000]}  # Limiting to 3000 characters for GPT input
+        """
+        with st.spinner("Generating comprehensive report using GPT..."):
+            response = client.chat.completions.create(
+                model="gpt-4o",
+                messages=[
+                    {"role": "system", "content": "You are a storytelling expert."},
+                    {"role": "user", "content": prompt}
+                ]
+            )
+            report = response.choices[0].message.content
+        st.markdown(report)
+    except Exception as e:
+        st.error(f"Error generating GPT-based comprehensive report: {e}")
+
+def generate_generic_gpt_prompt(df):
+    try:
+        st.subheader("🛠️ Generic GPT Prompt for Storytelling")
+        combined_tags = ", ".join(df["Storytelling Tags"].dropna().values)
+        prompt = f"""
+        Create a custom GPT model prompt for storytelling analysis based on the following observed storytelling elements:
+        {combined_tags}
+
+        The model should:
+        - Identify storytelling elements such as protagonist, antagonist, challenges, actions, and resolutions.
+        - Provide suggestions for improving emotional engagement and conflict resolution.
+        - Highlight data-driven insights to enhance storytelling effectiveness.
+        """
+        st.text_area("Custom GPT Prompt", prompt, height=200)
+    except Exception as e:
+        st.error(f"Error generating generic GPT prompt: {e}")
 
 with st.form("input_form"):
     st.subheader("Enter  Talks")
@@ -131,3 +216,5 @@ if submit:
             st.download_button("📥 Download CSV", df.to_csv(index=False), file_name="storytelling_analysis.csv")
             plot_tag_frequencies(df)
             render_wordcloud(df)
+            generate_comprehensive_report_with_gpt(df)
+            #generate_generic_gpt_prompt(df)
