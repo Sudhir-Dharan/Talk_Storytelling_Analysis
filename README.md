@@ -62,7 +62,5 @@ wordcloud
 | File                             | Description                                   |
 | ------------------------------   | --------------------------------------------- |
 | `storytelling_analysis.csv`      | Summary of talk analysis in table form.       |
-| `assets/wordcloud.png`           | Visual word frequency from full transcript.   |
-| `assets/charts.png`              | Tag frequency chart for comparative analysis. |
 
 ---
