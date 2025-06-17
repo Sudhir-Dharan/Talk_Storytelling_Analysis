@@ -21,7 +21,7 @@ It was developed as part of a CTO-level learning exercise to deepen understandin
 | File / Folder          | Purpose                                                                                                          |
 | -------------          | ---------------------------------------------------------------------------------------------------------------- |
 | `storytelling.py`      | Main Streamlit app. Hosts the UI for video entry, executes the storytelling analysis pipeline.                   |
-| `data/`                | Stores CSV exports generated after analyzing talks.                                                              |
+| `./`                   | Stores CSV exports generated after analyzing talks.                                                              |
 
 ---
 
