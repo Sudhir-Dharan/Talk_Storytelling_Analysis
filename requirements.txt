@@ -5,3 +5,6 @@ openai
 matplotlib
 wordcloud
 load_dotenv
+transformers
+torch
+sentence-transformers  # Correct package name
