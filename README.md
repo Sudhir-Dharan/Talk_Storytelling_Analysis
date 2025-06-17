@@ -50,12 +50,14 @@ It was developed as part of a CTO-level learning exercise to deepen understandin
 pip install streamlit youtube-transcript-api pandas openai wordcloud
 ```
 
-2. Execute the script
+2. If you want to use GPT functioanlity. Create ```.env``` file with Open AI Key with the name ```STORY_OPENAI_API_KEY```. Populate the Open AI key as the value.
+
+3. Execute the script
 ```bash
 streamlit run storytelling.py
 ```
 
-3. Access the app with the url shared by StreamLit console
+4. Access the app with the url shared by StreamLit console
 
 ---
 
