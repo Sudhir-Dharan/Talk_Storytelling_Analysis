@@ -43,6 +43,21 @@ It was developed as part of a CTO-level learning exercise to deepen understandin
 * Contains prompt engineering for GPT calls to classify and summarize storytelling elements.
 
 ---
+## Steps
+
+1. Install the dependencies
+```bash
+pip install streamlit youtube-transcript-api pandas openai wordcloud
+```
+
+2. Execute the script
+```bash
+streamlit run storytelling.py
+```
+
+3. Access the app in the url shared by StreamLit
+
+---
 
 ## 🧪 Dependencies
 
